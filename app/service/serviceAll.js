@@ -16,11 +16,11 @@ class ServiceAllService extends Service {
       };
       await this.app.mysql.query(update, { transaction, lock: transaction.LOCK.UPDATE });
       await this.app.mysql.query(insert, { transaction });
-      if (res[0].num === 0) {
-        const err = new Error('code');
-        err.code = 1000;
-        err.message = '暂无余票';
-        throw err;
+      if (res[0].num === -1) {
+        this.ctx.body = {
+          msg: '暂无余票~~~',
+        };
+        return;
       }
       transaction.commit();
     } catch (err) {
